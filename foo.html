@@ -1,0 +1,195 @@
+<html>
+    <head>
+        <script src="http://code.jquery.com/jquery-latest.min.js" type="text/javascript"></script>
+        <script src="http://netdna.bootstrapcdn.com/bootstrap/3.1.1/js/bootstrap.min.js"></script>
+        <script src="cipherutils.js" type="text/javascript"></script>
+        <script src="ciphersaber.js" type="text/javascript"></script>
+        <script src="rijndael.js" type="text/javascript"></script>
+        <script src="mcrypt.js" type="text/javascript"></script>
+        <script src="foo.js" type="text/javascript"></script>
+        <link href="bootstrap.min.css" rel="stylesheet">
+        <style type="text/css">
+            .vspace {
+                min-height; 15px;
+                height: 10px;
+            }
+            .fixedwidth {
+                font-family: Courier;
+                font-size: 18pt;
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container-fluid">
+            <div class="row vspace">
+            <div class="navbar navbar-inverse navbar-static-top">
+                <div class="container">
+                    <div class="navbar-brand">Password Vault</div>
+                    <button class="navbar-toggle" data-toggle="collapse" data-target=".navHeaderCollapse">
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                        <span class="icon-bar"></span>
+                    </button>
+                    <div class="collapse navbar-collapse navHeaderCollapse">
+                        <ul class="nav navbar-nav navbar-right">
+                            <li><a class="help-button non-help-page">Help</a></li>
+                            <li><a class="back-button help-page">Back</a></li>
+                            <li class="main-page"><a class="save-button">Save</a></li>
+                            <li class="login-page"><a class="login-button">Login</a></li>
+                            <li class="login-page"><a class="register-button">Register</a></li>
+                            <li class="dropdown">
+                                <a class="dropdown-toggle" data-toggle="dropdown">
+                                    Debug
+                                    <b class="caret"></b>
+                                </a>
+                                <ul class="dropdown-menu">
+                                    <li><a class="main-button">Main</a></li>
+                                    <li><a class="login-button">Login</a></li>
+                                    <li>
+                                        <a class="blank-button"
+                                           title="clear the pin and content box, do NOT clear localStorage">
+                                           Blank
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <a class="setup-button"
+                                           title="after clearing localStorage, put back the info">
+                                            Setup
+                                        </a>
+                                    </li>
+                                </ul>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <div class="row vspace">
+            </div>
+            <div class="main-page">
+                <div class="row">
+                    <div class="col-xs-1">
+                    </div>
+                    <div class="col-xs-10">
+                        <input type="text" id="pin" placeholder="PIN" class="col-xs-12"/>
+                    </div>
+                    <div class="col-xs-1">
+                    </div>
+                </div>
+                <div class="row vspace">`
+                </div>
+                <div class="row">
+                    <div class="col-xs-1"></div>
+                    <div class="col-xs-10">
+                        <textarea id="content" class="col-xs-12" rows="8"
+                         placeholder="plaintext will appear here"></textarea>
+                    </div>
+                    <div class="col-xs-1"></div>
+                </div>
+                <div class="row vspace">
+                </div>
+            </div>
+            <div class="login-page">
+                <div class="row">
+                    <div class="col-xs-1"></div>
+                    <div class="col-xs-10">
+                        <input type="text" id="username" placeholder="username" class="col-xs-12"/>
+                    </div>
+                    <div class="col-xs-1"></div>
+                </div>
+                <div class="row vspace">
+                </div>
+                <div class="row">
+                    <div class="col-xs-1"></div>
+                    <div class="col-xs-10">
+                        <input type="password" id="pw-input" placeholder="password" class="col-xs-12"/>
+                    </div>
+                    <div class="col-xs-1"></div>
+                </div>
+                <div class="row vspace">
+                </div>
+                <div class="row">
+                    <div class="col-xs-1"></div>
+                    <div class="col-xs-10">
+                        <input type="password" id="pw-input"
+                            placeholder="repeat password if registering"
+                            class="col-xs-12"/>
+                    </div>
+                    <div class="col-xs-1"></div>
+                </div>
+                <div class="row vspace">
+                </div>
+            </div>
+            <div class="help-page">
+                <div class="row">
+                    <div class="col-xs-1"></div>
+                    <div class="col-xs-3">
+                        Password
+                    </div>
+                    <div class="col-xs-7">
+                        <input id="pin-for-pw" class="col-xs-12" placeholder="PIN"/>
+                    </div>
+                    <div class="col-xs-1"></div>
+                </div>
+                <div class="row vspace">
+                </div>
+                <div class="row">
+                    <div class="col-xs-1"></div>
+                    <div class="col-xs-10">
+                        <span id="pw-show" class="fixedwidth col-xs-12"></span>
+                    </div>
+                    <div class="col-xs-1"></div>
+                </div>
+                <div class="row vspace">
+                </div>
+                <div class="row">
+                    <div class="col-xs-1"></div>
+                    <div class="col-xs-10">
+                        <p>You have two passwords, a long cryptographically-strong one that you'll probably never manage to memorize, and a short PIN that is used locally to decrypt the long one on your device. Content is encrypted with 128-bit RC4, generally considered safe but here is <a href="https://www.schneier.com/blog/archives/2013/03/new_rc4_attack.html">some informed discussion</a> of an attack from March 2013. This attack appears to be useful only for huge amounts of data encrypted with the same key, so inapplicable here. I'm considering switching to <a href="https://code.google.com/p/js-mcrypt">Rijndael</a> in <a href="http://en.wikipedia.org/wiki/Block_cipher_mode_of_operation">cipher-feedback mode</a>.</p>
+                        <p>Cryptographic rules of engagement</p>
+                        <ul>
+                            <li>
+                                The password is stored in PIN-encrypted form in the browser's localStorage.
+                            </li>
+                            <li>
+                                The content is stored in PW-encrypted form in the browser's localStorage and in the server's database.
+                            </li>
+                            <li>
+                                If the PIN is incorrectly guessed three times, localStorage is wiped.
+                            </li>
+                            <li>
+                                A salted hash of the password (not the password itself) is stored in the server's database.
+                            </li>
+                            <li>
+                                The salted hash never leaves the server.
+                            </li>
+                            <li>
+                                The PIN never leaves the browser, and is never stored in localStorage.
+                            </li>
+                            <li>
+                                The plaintext password is never stored in localStorage or on the server.
+                            </li>
+                            <li>
+                                The server will see the unencrypted password only when the user registers or logs in. The user can see his own unencrypted password by typing his PIN into the window on the help page.
+                            </li>
+                            <li>
+                                When the password is successfully decrypted, the PIN input field is erased. The PW is never visible in the browser, except when entering it on the login page, or retrieving it on the help page.
+                            </li>
+                        </ul>
+                        <p>TODO list</p>
+                        <ul>
+                            <li>
+                                Plan on entering the PIN with a keypad, or one of those finger direction things Android does, instead of a HTML text input.
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="col-xs-1"></div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-1"></div>
+                <div id="more" class="col-xs-10"></div>
+                <div class="col-xs-1"></div>
+            </div>
+        </div>
+    </body>
+</html>
