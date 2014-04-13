@@ -18,6 +18,11 @@
  */
  
  
+if (typeof module !== 'undefined') {
+	// dependency for node
+	var Rijndael = require('./rijndael.js');
+}
+
  //this creates a static class mcrypt that is already initialized
  var mcrypt=mcrypt?mcrypt:new function(){
  
@@ -296,3 +301,11 @@ pub.list_modes=function(){
 
 return pub; 
 };
+
+
+if (typeof module !== 'undefined') {
+    // node.js require
+    for (var key in mcrypt) {
+        module.exports[key] = mcrypt[key];
+    }
+}

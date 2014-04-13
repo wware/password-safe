@@ -222,3 +222,10 @@ var MixColumns_Inv=function(state) {
 }
 return pub;
 };
+
+if (typeof module !== 'undefined') {
+    // node.js require
+    for (var key in Rijndael) {
+        module.exports[key] = Rijndael[key];
+    }
+}
