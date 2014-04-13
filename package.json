@@ -1,0 +1,31 @@
+{
+  "name": "password-safe",
+  "version": "0.0.0",
+  "description": "An offline HTML5 app for remembering your passwords.",
+  "main": "server.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start": "node server.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/wware/password-safe.git"
+  },
+  "engines": {
+    "node": "0.10.x"
+  },
+  "keywords": [
+    "example",
+    "heroku"
+  ],
+  "author": "wware",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/wware/password-safe/issues"
+  },
+  "homepage": "https://github.com/wware/password-safe",
+  "dependencies": {
+    "express": "^4.0.0",
+    "logfmt": "^1.1.2"
+  }
+}
