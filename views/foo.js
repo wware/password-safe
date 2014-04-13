@@ -6,13 +6,13 @@ $(function() {
     var passwordShow = $('#pw-show');
     var mainPage = $('.main-page');
     var loginPage = $('.login-page');
-    var helpPage = $('.help-page');
-    var nonHelpPage = $('.non-help-page');
+    var aboutPage = $('.about-page');
+    var nonAboutPage = $('.non-about-page');
     var more = $('#more');
     var saveButton = $('.save-button');
     var mainButton = $('.main-button');
     var loginButton = $('.login-button');
-    var helpButton = $('.help-button');
+    var aboutButton = $('.about-button');
     var backButton = $('.back-button');
     var blankButton = $('.blank-button');
     var setupButton = $('.setup-button');
@@ -55,8 +55,8 @@ $(function() {
         blank();
         mainPage.hide();
         loginPage.show();
-        helpPage.hide();
-        nonHelpPage.show();
+        aboutPage.hide();
+        nonAboutPage.show();
     };
 
     /*
@@ -72,8 +72,8 @@ $(function() {
             mainPage.show();
             loginPage.hide();
         }
-        helpPage.hide();
-        nonHelpPage.show();
+        aboutPage.hide();
+        nonAboutPage.show();
     };
     backButtonHandler();
 
@@ -129,6 +129,7 @@ $(function() {
 
     attemptDecryption = function(event) {
         if (getPassword(pin, event)) {
+            passwordShow.text(password);
             content.val(cipher.decrypt(password, localStorage.getItem('content')));
             pin.val('');
             more.text('');
@@ -178,17 +179,17 @@ $(function() {
     mainButton.click(function() {
         mainPage.show();
         loginPage.hide();
-        helpPage.hide();
-        nonHelpPage.show();
+        aboutPage.hide();
+        nonAboutPage.show();
     });
 
     loginButton.click(goToLogin);
 
-    helpButton.click(function() {
+    aboutButton.click(function() {
         mainPage.hide();
         loginPage.hide();
-        helpPage.show();
-        nonHelpPage.hide();
+        aboutPage.show();
+        nonAboutPage.hide();
     });
 
     blankButton.click(blank);
