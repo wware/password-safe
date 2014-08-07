@@ -6,11 +6,25 @@ encrypted form, and syncs with the server when it's possible to do so.
 I'm figuring on [Node.js running on Heroku](https://devcenter.heroku.com/articles/getting-started-with-nodejs)
 for the backend.
 
+Reminder how node and npm work
+--
+
+* http://howtonode.org/introduction-to-npm
+* http://shapeshed.com/setting-up-nodejs-and-npm-on-mac-osx/
+
+Do this:
+
+```bash
+git clone git@github.com:wware/password-safe.git
+cd password-safe
+npm link          # sets up node_modules directory
+node server.js    # runs server on http://localhost:5000/
+```
+
 Crypto stuff
 --
 
-Encryption will be via [Ciphersaber](http://en.wikipedia.org/wiki/CipherSaber), or maybe
-[Rijndael](https://code.google.com/p/js-mcrypt/). There's a
+Encryption will be via [Rijndael](https://code.google.com/p/js-mcrypt/). There's a
 [npm package for Rijndael](https://www.npmjs.org/package/node-rijndael).
 Maybe I should use that. And here's [another](http://www.movable-type.co.uk/scripts/aes.html)
 Rijndael-in-JavaScript contender.

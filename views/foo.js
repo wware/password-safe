@@ -17,7 +17,7 @@ $(function() {
     var blankButton = $('.blank-button');
     var setupButton = $('.setup-button');
     var showPasswordButton = $('.showpw-button');
-    var cipher = ciphersaber;
+    var cipher;
     var password = null;
 
     try {
@@ -31,25 +31,18 @@ $(function() {
         return;
     }
 
-    var cipher;
-    // Maybe make it a user option to choose which cipher?
-    if (false) {
-        cipher = ciphersaber;
-    } else {
-        // use rijndael instead
-        cipher = {
-            encrypt: function(key, plaintext) {
-                var iv = cipherutils.makePassword(16);
-                var encrypted = mcrypt.Encrypt(plaintext, iv, key, 'rijndael-128', 'cfb');
-                return iv + encrypted;
-            },
-            decrypt: function(key, s) {
-                var iv = s.substring(0, 16);
-                var ciphertext = s.substring(16);
-                return mcrypt.Decrypt(ciphertext, iv, key, 'rijndael-128', 'cfb');
-            }
-        };
-    }
+    cipher = {
+        encrypt: function(key, plaintext) {
+            var iv = cipherutils.makePassword(16);
+            var encrypted = mcrypt.Encrypt(plaintext, iv, key, 'rijndael-128', 'cfb');
+            return iv + encrypted;
+        },
+        decrypt: function(key, s) {
+            var iv = s.substring(0, 16);
+            var ciphertext = s.substring(16);
+            return mcrypt.Decrypt(ciphertext, iv, key, 'rijndael-128', 'cfb');
+        }
+    };
 
     var goToLogin = function() {
         blank();
@@ -148,12 +141,12 @@ $(function() {
     };
 
     onGetPin(pin, function(event) {
-        attemptDecryption(ciphersaber, event);
+        attemptDecryption(event);
     });
 
     onGetPin(pinForPassword, function(event) {
         passwordShow.text('');
-        if (getPassword(ciphersaber, pinForPassword, event)) {
+        if (getPassword(pinForPassword, event)) {
             passwordShow.text(password);
         }
     });
