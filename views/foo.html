@@ -126,31 +126,25 @@
                         <p>Cryptographic rules of engagement</p>
                         <ul>
                             <li>
-                                The password is stored in PIN-encrypted form in the browser's localStorage.
+                                The long password is stored in PIN-encrypted form in the browser's localStorage. The plaintext password is never stored in localStorage.
                             </li>
                             <li>
-                                The content is stored in PW-encrypted form in the browser's localStorage and in the server's database.
+                                The content is stored in long-password-encrypted form in the browser's localStorage and in the server's database.
                             </li>
                             <li>
                                 If the PIN is incorrectly guessed three times, localStorage is wiped.
                             </li>
                             <li>
-                                A salted hash of the password (not the password itself) is stored in the server's database.
-                            </li>
-                            <li>
-                                The salted hash never leaves the server.
+                                The server never sees the long password. The long password is never stored on the server in any form.
                             </li>
                             <li>
                                 The PIN never leaves the browser, and is never stored in localStorage.
                             </li>
                             <li>
-                                The plaintext password is never stored in localStorage or on the server.
+                                The user can see the long password by typing his PIN into the window on the About page. The user is responsible for moving the long password between devices.
                             </li>
                             <li>
-                                The server will see the unencrypted password only when the user registers or logs in. The user can see his own unencrypted password by typing his PIN into the window on the About page.
-                            </li>
-                            <li>
-                                When the password is successfully decrypted, the PIN input field is erased. The PW is never visible in the browser, except when entering it on the login page, or retrieving it on the About page.
+                                When the password is successfully decrypted, the PIN input field is erased. The long password is never visible in the browser, except when entering it on the login page, or retrieving it on the About page.
                             </li>
                         </ul>
                         <p>TODO list</p>
