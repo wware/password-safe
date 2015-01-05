@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <script data-require="angular.js@1.3.5" data-semver="1.3.5" src="https://code.angularjs.org/1.3.5/angular.js"></script>
+  <script src="rijndael.js"></script>
+  <script src="script.js"></script>
+  <link rel="stylesheet" href="style.css"/>
+</head>
+
+<body ng-app="myApp">
+  <h1>Password safe</h1>
+  <div ng-controller="PasswordSafeController">
+    <div>
+      PIN
+      <input type="textbox" id="pin" ng-model="pin" />
+      <button ng-click="unlockKey()">Unlock key</button>
+      <button ng-click="clearKey()">Cleark key</button>
+      <button ng-click="saveKey()" class="scary">Save key</button>
+    </div>
+    <div>
+      Key
+      <input type="textbox" id="key" class="wider" ng-model="key" />
+      <button ng-click="unlockContent()">Unlock secrets</button>
+      <button ng-click="clearContent()">Clear secrets</button>
+      <button ng-click="saveContent()" class="scary">Save secrets</button>
+    </div>
+    <div>
+      <textarea id="key" rows="20" cols="100" ng-model="secrets"></textarea>
+    </div>
+  </div>
+  <div>
+    <h2>Overview</h2>
+    <p>In the browser window, we have a PIN textbox, a key textbox, a filename textbox, and an edit buffer textarea. We also have a picker for the different files.</p>
+    <p>In local storage, we have a PIN-encrypted key, N filenames, and N buffers for encrypted content. The filenames and the buffers are synced with the server (specific to each user) but not the PIN-encrypted key.</p>
+    <p>Ciphertexts use the following characters for base64 encoding: <code>2..9A..HJ..NP..Za..hj..np..z+-.:@#$%</code>
+    </p>
+    <p>The PIN-encrypted key in local storage is the ciphertext corresponding to the key HTML element, with the PIN as key. Three failed decryptions wipe all HTML elements and all variables in both JavaScript and local storage.</p>
+    <p>The edit buffer is the plaintext corresponding to the ciphertext of one of the file content buffers, selected by the picker, with the key HTML element as key. The filename selected by the picker is mapped with encryption/decryption to the filename
+      HTML input element.</p>
+    <p>When file contents are decrypted, the key HTML element and the PIN textbox are both cleared.</p>
+    <p>If the PIN-encrypted key in local storage is not set, a key should probably be generated (e.g. http://ebusiness.hopto.org/generator.htm) or it's possible the user may want to type in a key generated on a different device. In either of those cases,
+      the PIN is then used to encrypt the key and store the result in local storage.</p>
+    <h2>The Crypto-Synchronizer</h2>
+    <p>An important JavaScript thing is a crypto-synchronizer. This provides Angular-style data binding, combined with encryption and decryption. Its constructor has the following arguments.</p>
+    <ul>
+      <li>A function to get a key.</li>
+      <li>A function to set a plaintext.</li>
+      <li>A function to get a plaintext.</li>
+      <li>A function to set a ciphertext.</li>
+      <li>A function to get a ciphertext.</li>
+      <li>An optional function to call if decryption fails three times in a row.</li>
+    </ul>
+    <p>The crypto-synchronizer has two methods, encrypt and decrypt. The setters and getters are used to implement AngularJS-style data binding between HTML input elements and variables in JavaScript or local storage.</p>
+    <p>It would be possible to prototype the entire thing with a trivial crypto-synchronizer which would be a good idea from a dependency injection standpoint, as the results of encryption and decryption could be made very simple. Like if the PIN is an odd
+      number, then encryption is ROT-13, otherwise it's a pass-thru. Of course the real crypto-synchronizer will be high-grade crypto such as Rijndael.</p>
+    <h2>A few more things</h2>
+    <p>First, this needs to be an <a href="http://diveintohtml5.info/offline.html">HTML5 offline app</a>. That involves adding a <a href="http://diveintohtml5.info/offline.html#manifest">manifest</a> file, and thinking about which assets are cached in the browser.
+      Also, think about how browser local storage is used.</p>
+    <p>Second, the encrypted secrets need to be synced to a central server, and that needs to be done in the person&#39;s account. They should have a username and a low-ish security password for that, and those can be kept in browser local storage.</p>
+    <p>One more thing, use <a href="http://getbootstrap.com/getting-started/">Bootstrap</a> to make sure the app works well on all platforms.</p>
+  </div>
+</body>
+
+</html>
