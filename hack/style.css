@@ -5,3 +5,7 @@
 .wider {
     width: 200px;
 }
+
+input {
+    display: block;
+}
